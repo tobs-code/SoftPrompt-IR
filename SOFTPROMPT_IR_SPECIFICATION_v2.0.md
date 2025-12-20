@@ -1034,7 +1034,7 @@ The empirical validation revealed distinct performance characteristics between c
 - GitHub: https://github.com/tobs-code/SoftPrompt-IR
 - Email: tobsgo1@gmail.com
 
-**License:** APACHE 2.0
+**License:** Apache License 2.0
 
 **Citation:**
 ```bibtex
