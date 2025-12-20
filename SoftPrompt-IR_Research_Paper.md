@@ -1177,17 +1177,3 @@ Both models independently arrived at identical semantic decomposition.
 **Principle 2:** Novel combinations (`!>`) circumvent learned biases better than redefining existing symbols (`!`)
 
 **Principle 3:** Compositional transparency requires orthogonal components (strength + direction, not overloaded single symbols)
-
----
-
-## END OF PAPER
-
-**Word Count:** ~12,500 words  
-**Page Estimate:** ~25 pages (conference format)  
-**Figures Needed:** 4-6 (operator table, propagation diagram, conflict matrix, compression results)
-
-**Submission Targets:**
-- ICML 2025 (Prompt Engineering Track)
-- ACL 2025 (Computational Linguistics)
-- NeurIPS 2025 Workshop (Foundation Models)
-- CHI 2026 (Human-AI Interaction)
