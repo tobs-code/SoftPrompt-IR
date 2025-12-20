@@ -3,7 +3,7 @@
 **Version:** 2.0
 **Date:** 2025-12-19
 **Status:** Empirically Validated
-**Validation:** 100% consensus on directional hard operators across 4 leading closed-source frontier models (Claude Sonnet 4, GPT-4o, Gemini 2.0 Flash, Grok); 98% overall cross-model consensus
+**Validation:** 100% consensus on directional hard operators across 4 leading closed-source frontier models (Claude Sonnet 4.5, GPT-5.2, Gemini 3-0, Grok 4.1); 98% overall cross-model consensus
 
 ---
 
