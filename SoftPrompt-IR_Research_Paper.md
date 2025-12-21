@@ -327,7 +327,7 @@ We transformed real-world system prompts into SoftPrompt-IR and evaluated behavi
 
 ### 6.3 Behavioral Equivalence
 
-Both transformed prompts were tested across three model families (Claude Sonnet 4, GPT-4o, Gemini 2.0 Flash) with 20+ standardized test queries each.
+Both transformed prompts were tested across three model families  (Claude Sonnet 4.5, GPT-5.2, Gemini 3.0, Grok 4.1) with 20+ standardized test queries each.
 
 **Observations:**
 - **Session Stability:** Consistent behavior across multiple sessions with identical inputs
@@ -679,7 +679,7 @@ We presented **SoftPrompt-IR**, a declarative intermediate representation for en
 1. **Formalized intent weighting** through explicit symbolic operators
 2. **Hierarchical enforcement model** with directional propagation (forward/backward)
 3. **Compositional transparency** enabling zero-shot interpretation
-4. **Empirical validation** across diverse model architectures (Claude, GPT-4, Gemini, Grok, DeepSeek)
+4. **Empirical validation** across diverse model architectures (Claude, GPT, Gemini, Grok, DeepSeek)
 5. **Token reduction** of 75-92% while preserving behavioral equivalence
 
 **Key Insight:** Not all instructions are equal, yet current prompt representations fail to capture this fundamental asymmetry. SoftPrompt-IR provides a compact, auditable, and refactorable way to encode what matters most.
