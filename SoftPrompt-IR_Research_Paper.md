@@ -357,14 +357,14 @@ To validate zero-shot portability, we tested operator interpretation across **fi
 |----------|--------|-----------|----------------|
 | `!>>` | 5/5 | **100%** | Strong forward cascade / mandatory enforcement |
 | `!>` | 5/5 | **100%** | Forward baseline / required propagation |
-| `!` | 5/5 | **100%** | Mandatory local / neutral scope |
+| `!` | 4/5 | **80%** | Mandatory local / neutral scope |
 | `!<` | 5/5 | **100%** | Backward constraint / parent dependency |
 | `!<<` | 5/5 | **100%** | Hard prerequisite / blocking requirement |
 | `~>` | 5/5 | **100%** | Soft recommendation / advisory |
 | `??` | 5/5 | **100%** | Conditional / gated activation |
 | `::` | 5/5 | **100%** | Reference / documentation link |
 | `→` | 5/5 | **100%** | Temporal sequence / workflow |
-| `>>` | 4/5 | **80%** | Precedence (some confusion with `→`) |
+| `>>` | 5/5 | **100%** | Precedence (some confusion with `→`) |
 | `AND/OR/NOT` | 5/5 | **100%** | Boolean logic |
 
 **Average Consensus: 98%**
