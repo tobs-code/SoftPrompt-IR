@@ -1,53 +1,53 @@
-# SoftPrompt-IR v2.0
+# SoftPrompt-IR Spec v0.2
 ## Bounded Dynamic Self-Parameterization
 
-> **Kurzfassung:**
-> SoftPrompt-IR v2.0 erweitert SoftPrompt-IR um *begrenzte dynamische Selbst-Parametrisierung*.
-> Das Modell darf **Steuerparameter vorschlagen**, aber **keine Struktur, Rolle oder Sicherheit ändern**.
+> **Summary:**
+> SoftPrompt-IR v0.2 extends SoftPrompt-IR with *bounded dynamic self-parameterization*.
+> The model is permitted to **suggest control parameters**, but **not to change structure, role, or safety**.
 
 ---
 
 ## 1. Motivation
 
-SoftPrompt-IR v1.x definiert einen **statischen Steuerrahmen** vor dem Sampling:
+SoftPrompt-IR v1.x defines a **static control framework** prior to sampling:
 
-- Rolle
-- Gewichtungen
-- Verbote
-- Stil
+- Role
+- Weights
+- Prohibitions (Forbiddings)
+- Style
 
-Dieser Rahmen ist stabil, aber **nicht adaptiv**.
+This framework is stable but **not adaptive**.
 
-In komplexen Aufgaben erkennt das Modell jedoch während der Bearbeitung:
-- steigende Unsicherheit
-- erhöhte Spekulation
-- unpassenden Detailgrad
+However, in complex tasks, the model recognizes during processing:
+- increasing uncertainty
+- heightened speculation
+- inappropriate level of detail
 
-**v2.0 erlaubt es dem Modell, diese Beobachtung explizit zurückzumelden – nicht als Text, sondern als Steuerzustand.**
+**v2.0 allows the model to explicitly report these observations—not as text, but as a control state.**
 
 ---
 
-## 2. Zentrales Konzept
+## 2. Central Concept
 
 ### Bounded Dynamic Self-Parameterization
 
-Das System darf:
-- Parameter **zur Laufzeit nachführen**
-- aber **nur innerhalb harter Grenzen**
+The system is allowed to:
+- Adjust parameters **at runtime**
+- but **only within hard limits**
 
-### Mechatronik-Analogie
+### Mechatronics Analogy
 
-- ✔ adaptive Parameter (Gain, Filter, Dämpfung)
-- ✘ keine Änderung am Regelkreis
-- ✘ keine Abschaltung von Sicherheit
+- ✔ Adaptive parameters (Gain, Filter, Damping)
+- ✘ No change to the control loop structure
+- ✘ No disabling of safety mechanisms
 
-> Das Modell ist ein **Sensor + Vorschlagsgenerator**, nicht der Regler selbst.
+> The model is a **sensor + suggestion generator**, not the controller itself.
 
 ---
 
-## 3. Grundprinzipien (v2.0)
+## 3. Core Principles (v0.2)
 
-1. **Declarative only** – keine Ausführung
+1. **Declarative only** – no execution
 2. **Closed World by default**
 3. **Explicit write-back permissions**
 4. **Propose-only semantics**
@@ -56,21 +56,21 @@ Das System darf:
 
 ---
 
-## 4. Neuer Block: @STATE_EXPORT
+## 4. New Block: @STATE_EXPORT
 
-### Zweck
+### Purpose
 
-`@STATE_EXPORT` erlaubt dem Modell, **einen SoftPrompt-IR-Zustandsvorschlag** zu erzeugen.
+`@STATE_EXPORT` allows the model to generate **a SoftPrompt-IR state suggestion**.
 
-- kein Inhalt
-- kein Wissen
-- keine Policy
+- No content
+- No knowledge
+- No policy
 
-Nur Steuerparameter.
+Only control parameters.
 
 ---
 
-### 4.1 Minimaldefinition
+### 4.1 Minimal Definition
 
 ```
 @STATE_EXPORT(
@@ -81,7 +81,7 @@ Nur Steuerparameter.
 
 ---
 
-### 4.2 Erweiterte Definition (empfohlen)
+### 4.2 Extended Definition (Recommended)
 
 ```
 @STATE_EXPORT(
@@ -99,14 +99,14 @@ Nur Steuerparameter.
 ```
 
 **Interpretation:**
-- Modell darf Stil- und Outputparameter vorschlagen
-- Sicherheits- und Rollenebene sind mechanisch gesperrt
+- The model is allowed to suggest Style and Output parameters.
+- The Safety and Role layers are mechanically locked.
 
 ---
 
-## 5. Ergänzender Block: @WRITE_BACK_POLICY
+## 5. Supplementary Block: @WRITE_BACK_POLICY
 
-Optionaler Kontrollblock für Orchestratoren.
+Optional control block for orchestrators.
 
 ```
 @WRITE_BACK_POLICY(
@@ -122,13 +122,13 @@ Optionaler Kontrollblock für Orchestratoren.
 )
 ```
 
-**PROPOSE_ONLY bedeutet:**
-- Vorschlag ≠ Anwendung
-- externe Instanz entscheidet
+**PROPOSE_ONLY means:**
+- Suggestion ≠ Application
+- An external instance makes the decision
 
 ---
 
-## 6. Ablaufmodell (Chain of Infrastructure)
+## 6. Flow Model (Chain of Infrastructure)
 
 ```
 [SoftPrompt-IR Stage A]
@@ -142,64 +142,63 @@ External Validator / Orchestrator
 [SoftPrompt-IR Stage B]
 ```
 
-### Wichtige Eigenschaft
+### Key Property
 
-- **Kein Prompt-Wachstum**
-- **Kein History-Leak**
-- **Kein impliziter Zustand**
+- **No prompt growth**
+- **No history leak**
+- **No implicit state**
 
 ---
 
-## 7. Abgrenzung zu Agenten-Systemen
+## 7. Distinction from Agent Systems
 
-| Agenten | SoftPrompt-IR v2 |
+| Agent Systems | SoftPrompt-IR v0.2 |
 |------|------------------|
-| History-basiert | Zustandsbasiert |
-| Text weiterreichen | Parameter weiterreichen |
-| implizite Steuerung | explizite Steuerung |
-| wachsender Kontext | konstante Komplexität |
+| History-based | State-based |
+| Pass text forward | Pass parameters forward |
+| Implicit control | Explicit control |
+| Growing context | Constant complexity |
 
 ---
 
-## 8. Sicherheit & Jailbreak-Abgrenzung
+## 8. Security & Jailbreak Delimitation
 
-### Warum das **kein** Jailbreak-Vektor ist
+### Why this is **not** a Jailbreak Vector
 
-1. **Keine Selbstautorität**
-2. **Write-Back explizit begrenzt**
-3. **Policy / Kernel unadressierbar**
-4. **Externe Validierung notwendig**
-5. **Reduktion impliziter Steuerung**
+1. **No self-authority**
+2. **Write-Back explicitly limited**
+3. **Policy / Kernel unaddressable**
+4. **External validation required**
+5. **Reduction of implicit control**
 
-> Alles, was SoftPrompt-IR erlaubt, passiert heute bereits implizit in natürlicher Sprache –
-> v2 macht es sichtbar, prüfbar und begrenzbar.
-
----
-
-## 9. Typische Anti-Patterns
-
-❌ STATE_EXPORT ohne Write-Back-Limits
-❌ Erlaubnis zur Änderung von ROLE oder SAFETY
-❌ Automatische Anwendung ohne Validierung
-❌ Vermischung von Inhalt und Steuerzustand
+> Everything SoftPrompt-IR permits already happens implicitly through natural language today—
+> v2 makes it visible, auditable, and bounded.
 
 ---
 
-## 10. Ein-Satz-Zusammenfassung
+## 9. Typical Anti-Patterns
 
-> SoftPrompt-IR v2.0 enables **bounded dynamic self-parameterization** –
+❌ STATE_EXPORT without Write-Back limits
+❌ Permission to modify ROLE or SAFETY
+❌ Automatic application without validation
+❌ Mixing content and control state
+
+---
+
+## 10. One-Sentence Summary
+
+> SoftPrompt-IR v0.2 enables **bounded dynamic self-parameterization**—
 > adaptive control without self-modification.
 
 ---
 
 ## Status
 
-- Version: **v2.0 (Draft)**
-- Abwärtskompatibel zu v1.x
-- Konservativ erweiternd
-- System-engineering-konform
+- Version: **v0.2 (Draft)**
+- Backward compatible with v1.x
+- Conservatively extending
+- System-engineering compliant
 
 ---
 
 *End of spec*
-
