@@ -1,146 +1,221 @@
-# SoftPrompt-IR: Low-Level Intent & Direction Annotation for LLM Prompts
+## SoftPrompt-IR
 
-**SoftPrompt-IR** is not a DSL (Domain Specific Language), not a framework, and not a policy system. It is a **minimal symbolic layer** for explicitly representing intent strength, direction, and priority within prompts.
+### Low-Level Intent Weighting & Direction Annotation for LLM Prompts
+
+SoftPrompt-IR is **not** a DSL, not a framework, and not a policy system.
+
+It is a **minimal symbolic annotation layer** for explicitly expressing:
+
+* intent **strength**
+* intent **direction**
+* intent **priority**
+* intent **dominance / override**
+
+inside natural language prompts.
+
+It defines **no execution logic**.
+It only exposes **intent structure** that is otherwise implicit.
 
 ---
 
 ## Why SoftPrompt-IR Exists
 
-LLMs already process implicit signals such as:
+LLMs already reason over latent signals such as:
 
-*   Priority
-*   Intent
-*   Hierarchy
-*   Strength
-*   Avoidance vs. Enforcement
+* priority
+* strength
+* hierarchy
+* enforcement vs. avoidance
+* dominance between instructions
 
-Currently, however, these signals are:
+Today, these signals are usually:
 
-*   Implicit
-*   Buried in natural language flow
-*   Easily obfuscated
-*   Difficult to interpret (for both humans and models)
+* implicit
+* buried in prose
+* distributed across sentences
+* easy to contradict unintentionally
+* hard to inspect or debug
 
-**SoftPrompt-IR makes these signals explicit.**
+SoftPrompt-IR makes these signals **explicit and localized**.
 
-This is not done to gain more control, but to **reduce ambiguity, attack surface, and unintended behavior.**
+Not to gain more control —
+but to **reduce ambiguity, noise, and unintended behavior** *before sampling*.
 
 ---
 
 ## Core Idea
 
-SoftPrompt-IR uses small symbolic operators to annotate:
+SoftPrompt-IR uses **small symbolic operators** to annotate intent along two axes:
 
-*   How strong something is
-*   The direction it pushes toward
-*   Whether it enforces or avoids something
+1. **Strength** (how much it should matter)
+2. **Direction** (enforce vs. avoid, local vs. downstream)
 
-It defines **no execution logic**, but **only the intent structure.**
+It does **not** tell the model *what to do* —
+it tells the model **what matters more than what**.
 
-### Example
+Think of it as **weighting signals**, not commands.
 
-```
+---
+
+## Minimal Example
+
+```text
 @TASK(
   "Write a short story about a failed mission."
 )
 
-~<<<purple_prose
-~<<cliches
-~<over_explaining
+~<<< PURPLE_PROSE
+~<<  CLICHES
+~<   OVER_EXPLAINING
 ```
 
-**Interpretation:**
+### Interpretation (informal)
 
-*   Avoid excessive purple prose (strong)
-*   Avoid clichés (moderate)
-*   Avoid over-explaining (gentle)
+* Strongly avoid purple prose
+* Moderately avoid clichés
+* Gently discourage over-explaining
 
-There are **no prohibitions** and **no hard rules**, only **probability shaping.**
+There are:
 
----
+* no hard rules
+* no prohibitions
+* no forced decoding
 
-## Intuition for Direction & Strength
-
-SoftPrompt-IR is based on visual and positional intuition:
-
-1.  **More symbols = More weight**
-2.  **Direction** is crucial
-3.  **Prefix position** implies dominance
-
-**Examples:**
-
-*   `!>>`: Mandatory, non-negotiable
-*   `~<`: Gentle avoidance / de-escalation
-*   `~<<<`: Strong stylistic avoidance
-*   `>>!`: Sentence or local constraint
-
-This works because:
-
-*   Humans grasp these symbols instantly.
-*   LLMs already model similar latent concepts.
+Only **probability shaping** via relative weight.
 
 ---
 
-## What SoftPrompt-IR Is Not
+## Cascading & Dominance (The Important Part)
+
+SoftPrompt-IR is intentionally **asymmetric**.
+
+More symbols = more weight
+Earlier / stronger markers dominate weaker ones
+
+```text
+!>>> PRIMARY_CONSTRAINT
+~>>  SECONDARY_PREFERENCE
+~>   OPTIONAL_STYLE
+```
+
+This creates a **cascade**:
+
+* strong intent dominates weaker intent
+* global signals dominate local ones
+* conflicts resolve by weight, not prose order
+
+No if/else.
+No branching.
+Just dominance.
+
+---
+
+## Direction Matters
+
+Direction is part of the signal, not decoration.
+
+Examples:
+
+```text
+!>>> MUST_ENFORCE
+~<<< STRONGLY_AVOID
+~<   GENTLY_DE_ESCALATE
+>>!  LOCAL_HARD_CONSTRAINT
+```
+
+Informal intuition:
+
+* `>` pushes *forward / downstream*
+* `<` pulls *away / de-escalates*
+* repetition amplifies weight
+* prefix position implies scope
+
+These are **not formal semantics** —
+they are **structural cues the model already recognizes**.
+
+---
+
+## Why This Works (Without Training)
+
+LLMs have seen massive amounts of:
+
+* config files
+* rulesets
+* policies
+* flags
+* priority markers
+* logs and diagnostics
+
+SoftPrompt-IR does **not** invent meaning.
+
+It leverages the model’s ability to exploit:
+
+* consistent structure
+* relative salience
+* symbolic hierarchy
+
+---
+
+## What SoftPrompt-IR Is *Not*
 
 SoftPrompt-IR is **not**:
 
-*   A jailbreaking technique
-*   A prompt hacking tool
-*   A policy bypass
-*   A replacement for classifiers or filters
-*   A new programming language
+* a jailbreaking technique
+* a prompt hacking method
+* a safety bypass
+* a classifier replacement
+* a programming language
 
-In fact, the goal is often the opposite: **It aims to make unsafe or contradictory intentions harder to conceal.**
+In many cases, it does the opposite:
+👉 it makes unsafe or contradictory intent **harder to hide**.
 
 ---
 
 ## Why Low-Level Matters
 
-Because SoftPrompt-IR operates **below** existing prompt engineering conventions:
+SoftPrompt-IR operates **below** common prompt conventions.
 
-*   It can be combined with any prompt
-*   It does not fight existing safety systems
-*   It can be safely ignored
-*   It degrades gracefully
+That makes it:
+
+* composable with any prompt
+* compatible with safety systems
+* ignorable if unsupported
+* predictable when it fails
 
 Low-level primitives tend to:
 
-*   Last longer
-*   Integrate more easily
-*   Fail more predictably
-
----
-
-## Potential Applications
-
-*   Structuring system prompts
-*   Safety and governance research
-*   Prompt evaluation and testing
-*   Control in creative writing
-*   Prompting in high-risk domains (theoretically)
-*   Debugging prompt behavior
+* age well
+* combine easily
+* degrade gracefully
+* be hard to misuse accidentally
 
 ---
 
 ## Design Philosophy
 
-The philosophy of SoftPrompt-IR prioritizes:
+SoftPrompt-IR prioritizes:
 
-*   **Explicit** over Implicit
-*   **De-escalation** over Prohibition
-*   **Structure** over Cleverness
-*   **Readability** over Compression
-*   **Compatibility** over Control
+* explicit over implicit
+* weighting over wording
+* de-escalation over prohibition
+* structure over cleverness
+* compatibility over control
 
 ---
 
 ## Status
 
-This is an **experimental specification**. There are **no guarantees**, **no enforcement**, and **no hidden magic.**
+This is an **experimental specification**.
 
-It is simply a small idea that seems to work surprisingly well.
+There is:
 
-**Final Note:**
+* no enforcement
+* no guarantee
+* no hidden mechanism
 
-If you think, "This is obvious—why didn't this exist already?" then that is the point. 🙂
+Just a small idea:
+
+> Make intent **visible** before sampling.
+
+If it feels obvious in hindsight —
+that means it’s probably at the right level 🙂
