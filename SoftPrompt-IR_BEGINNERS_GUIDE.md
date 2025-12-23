@@ -233,15 +233,15 @@ Think of it like wiring: you can't have a "maybe 5V or maybe not" connection. Th
 The more arrows, the stronger the weight. Your brain already gets this:
 
 ```
-HARD FORWARD (requirements)     SOFT FORWARD (preferences)
-!>>>  ████████████  (maximum)   ~>>>  ▓▓▓▓▓▓▓▓  (strongly preferred)
-!>>   ████████      (strong)    ~>>   ▓▓▓▓▓     (preferred)
-!>    █████         (normal)    ~>    ▓▓▓       (nice to have)
+HARD FORWARD (requirements)         SOFT FORWARD (preferences)
+!>>>  ████████████  (maximum)       ~>>>  ▓▓▓▓▓▓▓▓  (strongly preferred)
+!>>   ████████      (strong)        ~>>   ▓▓▓▓▓     (preferred)
+!>    █████         (normal)        ~>    ▓▓▓       (nice to have)
 
-HARD BACKWARD (blockers)        SOFT BACKWARD (avoidances)
-<<<   ████████████  (forbidden) ~<<<  ▓▓▓▓▓▓▓▓  (strongly avoid)
-<<    ████████      (not allowed) ~<<   ▓▓▓▓▓     (prefer to avoid)
-<     █████         (must avoid)  ~<    ▓▓▓       (weakly avoid)
+HARD BACKWARD (blockers)            SOFT BACKWARD (avoidances)
+<<<   ████████████  (forbidden)     ~<<<  ▓▓▓▓▓▓▓▓  (strongly avoid)
+<<    ████████      (not allowed)   ~<<   ▓▓▓▓▓     (prefer to avoid)
+<     █████         (must avoid)    ~<    ▓▓▓       (weakly avoid)
 ```
 
 ---
@@ -352,3 +352,4 @@ SoftPrompt-IR doesn't teach LLMs something new — it speaks a language they alr
 **Now imagine asking an LLM to guess your intent from prose... or just telling it explicitly.**
 
 Which would you trust more?
+
