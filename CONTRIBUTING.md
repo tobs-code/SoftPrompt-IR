@@ -1,16 +1,17 @@
-# Contributing to SoftPrompt-IR
+# Contributing to SoftPrompt-IR (Research / Evaluation)
 
-SoftPrompt-IR is an experimental concept, not a framework or product.
+SoftPrompt-IR is an experimental annotation concept for prompt intent and weighting.
 
-Contributions are welcome in the form of:
-- conceptual discussions
-- examples and counterexamples
-- minimal clarifications
-- failure cases
+Contributions are welcome that focus on:
+- empirical comparisons (before / after)
+- small-scale evaluations or ablations
+- controlled examples and counterexamples
+- failure modes and edge cases
 
-Please avoid:
-- adding execution logic
-- turning this into a DSL or workflow system
-- overengineering or abstraction for its own sake
+Please keep changes minimal and well-scoped.
+Prefer observation over prescription.
 
-Open an issue to discuss ideas before proposing changes.
+This project does not aim to define execution semantics or guarantees.
+If you propose an extension, explain what ambiguity it reduces.
+
+Open an issue before submitting larger changes.
