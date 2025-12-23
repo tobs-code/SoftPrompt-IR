@@ -1,5 +1,8 @@
 # SoftPrompt-IR: A Beginner's Guide
 
+You don't need to understand everything here.
+You can start using SoftPrompt-IR after the first example.
+
 ## The Problem: LLMs Can't Read Your Mind
 
 When you write a prompt like this:
@@ -12,6 +15,18 @@ When you write a prompt like this:
 - What's a hard blocker vs. a soft preference?
 
 It can't. It guesses. And guessing means inconsistent results.
+
+---
+
+## The 60-Second Rule (Read This First)
+
+If you're new, remember just this:
+
+1. Put things you **MUST have** with `!>>>`
+2. Put things you **WANT** with `~>`
+3. Put things you **DON'T WANT** with `<<<`
+
+That's enough to start.
 
 ---
 
@@ -43,13 +58,13 @@ SoftPrompt-IR replaces vague words with **explicit visual weight**.
 )
 
 @CONTEXT(
-  !> USER :: tobi
+  !> USER :: example_user
 )
 ```
 
 Now the intent is **unambiguous**:
 - Sci-fi and female hero are **non-negotiable**
-- Love story is **blocked** (hard dependency: "cannot proceed if this exists")
+- Love story is **blocked** (hard blocker: "absolutely forbidden")
 - Cool cars matter more than lollipops, which matter more than blue
 - All soft preferences (`~`) can be dropped if needed
 
@@ -57,7 +72,18 @@ Now the intent is **unambiguous**:
 
 ## The Operators: Your Visual Vocabulary
 
-### Hard Operators (`!`) — Non-Negotiable
+### The Core Principle
+
+**Two dimensions determine every operator:**
+
+1. **Hard vs Soft:** `!` or no prefix = hard / `~` = soft
+2. **Strength:** More arrows = stronger intensity
+
+That's it. Everything else follows from this.
+
+---
+
+### Hard Forward Operators (`!`) — Non-Negotiable Requirements
 
 | Operator | Strength | Meaning |
 |----------|----------|---------|
@@ -76,7 +102,7 @@ Now the intent is **unambiguous**:
 
 ---
 
-### Soft Operators (`~`) — Preferences
+### Soft Forward Operators (`~`) — Preferences
 
 | Operator | Strength | Meaning |
 |----------|----------|---------|
@@ -95,28 +121,75 @@ Now the intent is **unambiguous**:
 
 ---
 
-### Backward Operators — Dependencies & Blockers
+### Hard Backward Operators — Blockers
 
-These point **backwards** (think: "this depends on..." or "this blocks...").
-
-**⚠️ Important: Never put `!` before backward arrows!**
-The `!` would negate it. Backward operators work differently.
+These point **backwards** and **block** things. No prefix or `!` = hard.
 
 | Operator | Strength | Meaning |
 |----------|----------|---------|
-| `<<<` | Hard Block | **Absolutely forbidden** — stops everything |
-| `<<` | Block | **Not allowed** — strong rejection |
-| `<` | Soft Block | **Prefer to avoid** |
-| `~<<<` | Soft Dep | **Would be nice to have first** |
-| `~<<` | Soft Dep | **Preferably depends on** |
-| `~<` | Soft Dep | **Weakly related to** |
+| `<<<` | Strongest | **Absolutely forbidden** — hard stop, no exceptions |
+| `<<` | Strong | **Not allowed** — strong block |
+| `<` | Normal | **Must avoid** — hard block |
+
+**Note:** These are pure exclusions, not dependencies. They block things completely.
 
 **Example:**
 ```
-@CONTENT(
-  <<<  VIOLENCE            ← Absolutely no violence
+@FORBIDDEN(
+  <<<  VIOLENCE            ← Absolutely no violence, ever
   <<   PROFANITY           ← No swearing
-  ~<   TECHNICAL_JARGON    ← Avoid if possible, but okay if needed
+  <    NEGATIVE_TONE       ← Must avoid negative tone
+)
+```
+
+### Advanced Note (skip on first read): Dependencies vs Blockers
+
+#### ⚠️ CRITICAL SYNTAX WARNING: Backward Operators & `!`
+
+**Never put `!` before backward arrows!** The `!` would negate it.
+
+**Backward operators work differently:**
+- `!<<<` creates a **dependency**, not a prohibition!
+
+**Why this matters for dependencies:**
+When you write `!<<< DEPENDS_ON_SOMETHING`, it means "this creates a strong dependency relationship", not "this is absolutely forbidden".
+
+**Example of correct usage:**
+```
+@DEPENDENCIES(
+  !<<< DATABASE_READY     ← Strong dependency: requires database to be ready
+  !<<  API_AVAILABLE      ← Dependency: requires API availability
+  !<   CACHE_WARMED       ← Normal dependency: cache should be warmed
+)
+```
+
+**Wrong usage (would create confusion):**
+```
+@FORBIDDEN(
+  !<<< VIOLENCE          ← WRONG! This means "depends on violence", not "forbids violence"
+)
+```
+
+**If you're new: you can ignore dependencies for now. Most beginners only need forward rules (`>`) and blockers (`<`).**
+
+---
+
+### Soft Backward Operators (`~`) — Avoidances
+
+These point **backwards** but are **soft** — avoid if possible, but not a hard stop.
+
+| Operator | Strength | Meaning |
+|----------|----------|---------|
+| `~<<<` | Strongest | **Strongly prefer to avoid** |
+| `~<<` | Strong | **Prefer to avoid** |
+| `~<` | Normal | **Weakly avoid** — if possible |
+
+**Example:**
+```
+@PREFERENCES(
+  ~<<< TECHNICAL_JARGON    ← Really try to avoid jargon
+  ~<<  LONG_SENTENCES      ← Prefer shorter sentences
+  ~<   PASSIVE_VOICE       ← Avoid if possible, but okay if needed
 )
 ```
 
@@ -142,7 +215,7 @@ Think of it like wiring: you can't have a "maybe 5V or maybe not" connection. Th
 **Example:**
 ```
 @CONTEXT(
-  !>>> USER :: tobi                    ← User is definitely tobi
+  !>>> USER :: example_user            ← User is definitely example_user
   !>>  LANGUAGE :: german              ← Language is strongly bound to german
   !>   DOMAIN :: software_development  ← Domain is bound to software dev
 )
@@ -160,17 +233,15 @@ Think of it like wiring: you can't have a "maybe 5V or maybe not" connection. Th
 The more arrows, the stronger the weight. Your brain already gets this:
 
 ```
-!>>>  ████████████  (maximum)
-!>>   ████████      (strong)
-!>    █████         (normal)
+HARD FORWARD (requirements)     SOFT FORWARD (preferences)
+!>>>  ████████████  (maximum)   ~>>>  ▓▓▓▓▓▓▓▓  (strongly preferred)
+!>>   ████████      (strong)    ~>>   ▓▓▓▓▓     (preferred)
+!>    █████         (normal)    ~>    ▓▓▓       (nice to have)
 
-~>>>  ▓▓▓▓▓▓▓▓      (strong preference)
-~>>   ▓▓▓▓▓         (preference)
-~>    ▓▓▓           (weak preference)
-
-<<<   ████████████  (hard block)
-<<    ████████      (block)
-<     █████         (soft avoid)
+HARD BACKWARD (blockers)        SOFT BACKWARD (avoidances)
+<<<   ████████████  (forbidden) ~<<<  ▓▓▓▓▓▓▓▓  (strongly avoid)
+<<    ████████      (not allowed) ~<<   ▓▓▓▓▓     (prefer to avoid)
+<     █████         (must avoid)  ~<    ▓▓▓       (weakly avoid)
 ```
 
 ---
@@ -209,7 +280,7 @@ The more arrows, the stronger the weight. Your brain already gets this:
 **What changed:**
 - Priority is explicit (security > clean code > performance)
 - TypeScript is preferred, not required
-- Exposed secrets are a **hard block**, not just "please don't"
+- Exposed secrets are **absolutely forbidden** (`<<<`), not just "please don't"
 - Style source is **hard bound** to the guide file
 - Adding comments is a separate **soft preference**
 
@@ -218,16 +289,38 @@ The more arrows, the stronger the weight. Your brain already gets this:
 ## Quick Reference Card
 
 ```
-HARD REQUIREMENTS        SOFT PREFERENCES         BLOCKERS
-!>>>  absolute must      ~>>>  really want        <<<  absolutely not
-!>>   must have          ~>>   would like         <<   should not  
-!>    required           ~>    nice to have       <    prefer to avoid
+HARD FORWARD (requirements)     SOFT FORWARD (preferences)
+!>>>  absolute must             ~>>>  really want
+!>>   must have                 ~>>   would like
+!>    required                  ~>    nice to have
+
+HARD BACKWARD (blockers)        SOFT BACKWARD (avoidances)
+<<<   absolutely forbidden      ~<<<  strongly avoid
+<<    not allowed               ~<<   prefer to avoid
+<     must avoid                ~<    weakly avoid
 
 BINDING/CONTEXT
 !>>> X :: value    absolutely bound
 !>>  X :: value    strongly bound
 !>   X :: value    bound (required)
 ```
+
+---
+
+## The Pattern
+
+Once you see it, you can't unsee it:
+
+| | **Hard** | **Soft** |
+|---|---|---|
+| **Forward (requirements/preferences)** | `!>>>` `!>>` `!>` | `~>>>` `~>>` `~>` |
+| **Backward (blockers/avoidances)** | `<<<` `<<` `<` | `~<<<` `~<<` `~<` |
+
+- **`!` or no prefix = hard** (must/must not)
+- **`~` = soft** (prefer/prefer not)
+- **`>` = forward** (requirements)
+- **`<` = backward** (blockers)
+- **More arrows = stronger**
 
 ---
 
@@ -246,15 +339,16 @@ SoftPrompt-IR doesn't teach LLMs something new — it speaks a language they alr
 
 ## TL;DR
 
-1. **More arrows = stronger weight** (`!>>>` > `!>>` > `!>`)
-2. **`!` = hard / `~` = soft**
-3. **Forward (`>`) = requirements / Backward (`<`) = blockers**
+1. **`!` or no prefix = hard / `~` = soft**
+2. **`>` = forward (requirements) / `<` = backward (blockers)**
+3. **More arrows = stronger weight** (`>>>` > `>>` > `>`)
 4. **`::` = binding (always needs a strength operator in front!)**
 5. **No implicit words** — the structure IS the meaning
+
+   You never write words like "always", "never", "if", or "prefer". The arrows already say that.
 
 ---
 
 **Now imagine asking an LLM to guess your intent from prose... or just telling it explicitly.**
 
 Which would you trust more?
-
