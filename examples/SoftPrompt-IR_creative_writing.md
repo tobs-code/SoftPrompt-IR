@@ -90,7 +90,7 @@ Some creative writers find code-like syntax **anti-creative**. If `!>>>` and `!<
 
 ## When You Should Consider It as a Writer
 
-✅ **You are working with AI co-writing tools** (Claude, GPT-4, etc.) and want better control over their output.
+✅ **You are working with AI co-writing tools** (Claude, GPT, etc.) and want better control over their output.
 
 ✅ **You have complex rules** (e.g., "Hard Sci-Fi: Physics accurate, but Characters > Technology").
 
