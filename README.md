@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Stars](https://img.shields.io/github/stars/tobs-code/SoftPrompt-IR.svg)](https://github.com/tobs-code/SoftPrompt-IR/stargazers)
+
 ## SoftPrompt-IR
 
 ### Low-Level Intent Weighting & Direction Annotation for LLM Prompts
