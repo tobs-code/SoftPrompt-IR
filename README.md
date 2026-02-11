@@ -150,25 +150,6 @@ Informal intuition:
 
 ---
 
-### Dependencies (Special Case)
-
-Dependencies are **explicit prerequisite signals**
-
-They are defined **only** like this:
-
-```text
-!<<< REQUIRED_CONDITION
-```
-
-Meaning:
-
-> This intent **cannot proceed unless** the requirement is satisfied.
-
-Dependencies are **not equivalent** to “strong backward preference”.
-They are a **separate semantic construct**.
-
----
-
 ### Invalid Forms (Do Not Use)
 
 ```text
